@@ -20,6 +20,7 @@ const (
 	Locale_fi    LocaleType = "fi"
 	Locale_fr    LocaleType = "fr"
 	Locale_he    LocaleType = "he"
+	Locale_id    LocaleType = "id"
 	Locale_it    LocaleType = "it"
 	Locale_ja    LocaleType = "ja"
 	Locale_ko    LocaleType = "ko"
@@ -50,6 +51,7 @@ var (
 		Locale_fi,
 		Locale_fr,
 		Locale_he,
+		Locale_id,
 		Locale_it,
 		Locale_ja,
 		Locale_ko,
@@ -124,6 +126,8 @@ func newLocaleLoader(typ LocaleType) (loaders []Locale, err error) {
 		rawData = i18n.Locale_fr
 	case Locale_he:
 		rawData = i18n.Locale_he
+	case Locale_id:
+		rawData = i18n.Locale_id
 	case Locale_it:
 		rawData = i18n.Locale_it
 	case Locale_ja:
@@ -305,6 +309,8 @@ func ParseLocale(s string) (l LocaleType, err error) {
 		return Locale_fr, nil
 	case "he":
 		return Locale_he, nil
+	case "id":
+		return Locale_id, nil
 	case "it":
 		return Locale_it, nil
 	case "ja":

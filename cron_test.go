@@ -17,6 +17,7 @@ var (
 		Locale_fi:    fi_TestCases(),
 		Locale_fr:    fr_TestCases(),
 		Locale_he:    he_TestCases(),
+		Locale_id:    id_TestCases(),
 		Locale_it:    it_TestCases(),
 		Locale_ja:    ja_TestCases(),
 		Locale_ko:    ko_TestCases(),

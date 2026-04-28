@@ -8,10 +8,10 @@
   <br />
 </p>
 
-cron is a Go library that parses a cron expression and outputs a human readable description of the cron schedule.  
-For example, given the expression `*/5 * * * *` it will output `Every 5 minutes`.  
+cron is a Go library that parses a cron expression and outputs a human readable description of the cron schedule.
+For example, given the expression `*/5 * * * *` it will output `Every 5 minutes`.
 
-Translated to Go from [cron-expression-descriptor](https://github.com/bradymholt/cron-expression-descriptor) (C#) via [cRonstrue](https://github.com/bradymholt/cRonstrue) (Javascript).  
+Translated to Go from [cron-expression-descriptor](https://github.com/bradymholt/cron-expression-descriptor) (C#) via [cRonstrue](https://github.com/bradymholt/cRonstrue) (Javascript).
 Original Author & Credit: Brady Holt (http://www.geekytidbits.com).
 
 ## Features
@@ -19,7 +19,7 @@ Original Author & Credit: Brady Holt (http://www.geekytidbits.com).
 - Supports all cron expression special characters including `* / , - ? L W #`
 - Supports 5, 6 (w/ seconds or year), or 7 (w/ seconds and year) part cron expressions
 - Supports [Quartz Job Scheduler](http://www.quartz-scheduler.org/) cron expressions
-- i18n support with 26 locales.
+- i18n support with 27 locales.
 
 ## Installation
 `cron` module can be used with both Go module (>= 1.11) and earlier Go versions.
@@ -34,10 +34,10 @@ go get -u -v github.com/lnquy/cron
 exprDesc, _ := cron.NewDescriptor()
 
 desc, _ := exprDesc.ToDescription("* * * * *", cron.Locale_en)
-// "Every minute" 
+// "Every minute"
 
 desc, _ := exprDesc.ToDescription("0 23 ? * MON-FRI", cron.Locale_en)
-// "At 11:00 PM, Monday through Friday" 
+// "At 11:00 PM, Monday through Friday"
 
 desc, _ := exprDesc.ToDescription("23 14 * * SUN#2", cron.Locale_en)
 // "At 02:23 PM, on the second Sunday of the month"
@@ -83,6 +83,7 @@ By default, `ExpressionDescriptor` always load the `Locale_en`. If you pass an u
 |  fi         | Finnish              | [Mikael Rosenberg](https://github.com/MR77FI)              |
 |  fr         | French               | [Arnaud TAMAILLON](https://github.com/Greybird)            |
 |  he         | Hebrew               | [Ilan Firsov](https://github.com/IlanF)                    |
+|  id         | Indonesian           | [Kiki L Hakiem](https://github.com/kikihakiem)             |
 |  it         | Italian              | [rinaldihno](https://github.com/rinaldihno)                |
 |  ja         | Japanese             | [Alin Sarivan](https://github.com/asarivan)                |
 |  ko         | Korean               | [Ion Mincu](https://github.com/ionmincu)                   |
@@ -105,12 +106,12 @@ By default, `ExpressionDescriptor` always load the `Locale_en`. If you pass an u
 
 ## hcron
 
-`hcron` is the CLI tool to convert the CRON expression to human readable string.  
+`hcron` is the CLI tool to convert the CRON expression to human readable string.
 You can pass the CRON expressions as the program argument, piped `hcron` with stdin or given the path to crontab file.
 
 ### Install
 
-You can find the pre-built binaries for Linux, MacOS, FreeBSD and Windows from the [Release](https://github.com/lnquy/cron/releases).  
+You can find the pre-built binaries for Linux, MacOS, FreeBSD and Windows from the [Release](https://github.com/lnquy/cron/releases).
 
 For other OS or architecture, you can build the code using Go as below:
 
@@ -154,7 +155,7 @@ Examples:
   $ hcron "0 */10 9 * * 1-5 2020"
   $ hcron -locale fr "0 */10 9 * * 1-5 2020"
   $ hcron -file /var/spool/cron/crontabs/mycronfile
-  $ another-app | hcron 
+  $ another-app | hcron
   $ another-app | hcron --dow-starts-at-one --24-hour -locale es
 ```
 

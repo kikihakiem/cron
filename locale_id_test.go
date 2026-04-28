@@ -1,0 +1,133 @@
+package cron
+
+func id_TestCases() []localeTestCase {
+	return []localeTestCase{
+		// Every
+		{inExpr: "* * * * * *", outErr: nil, outDesc: "Setiap detik"},
+		{inExpr: "* * * * *", outErr: nil, outDesc: "Setiap menit"},
+		{inExpr: "* * * * *", isVerbose: true, outErr: nil, outDesc: "Setiap menit, setiap jam, setiap hari"},
+		{inExpr: "*/1 * * * *", outErr: nil, outDesc: "Setiap menit"},
+		{inExpr: "*/5 * * * *", outErr: nil, outDesc: "Setiap 5 menit"},
+		{inExpr: "0 0/1 * * * ?", outErr: nil, outDesc: "Setiap menit"},
+		{inExpr: "0 0 * * * ?", outErr: nil, outDesc: "Setiap jam"},
+		{inExpr: "0 0 0/1 * * ?", outErr: nil, outDesc: "Setiap jam"},
+		{inExpr: "* * * 3 *", outErr: nil, outDesc: "Setiap menit, hanya di bulan Maret"},
+		{inExpr: "* * * 3,6 *", outErr: nil, outDesc: "Setiap menit, hanya di bulan Maret dan Juni"},
+		{inExpr: "* * * * * * 2013", outErr: nil, outDesc: "Setiap detik, hanya di tahun 2013"},
+		{inExpr: "* * * * * 2013", outErr: nil, outDesc: "Setiap menit, hanya di tahun 2013"},
+		{inExpr: "* * * * * 2013,2014", outErr: nil, outDesc: "Setiap menit, hanya di tahun 2013 dan 2014"},
+
+		// Interval
+		{inExpr: "*/45 * * * * *", outErr: nil, outDesc: "Setiap 45 detik"},
+		{inExpr: "*/5 * * * *", outErr: nil, outDesc: "Setiap 5 menit"},
+		{inExpr: "*/10 * * * *", outErr: nil, outDesc: "Setiap 10 menit"},
+		{inExpr: "0 */5 * * * *", outErr: nil, outDesc: "Setiap 5 menit"},
+		{inExpr: "0 9-17 * * *", outErr: nil, outDesc: "Setiap jam, pukul 09:00 AM hingga 05:59 PM"},
+		{inExpr: "0 * ? * 2/1 *", outErr: nil, outDesc: "Setiap menit, Februari hingga Desember"},
+		{inExpr: "0 * ? * 2/1", outErr: nil, outDesc: "Setiap jam, Selasa hingga Sabtu"},
+		{inExpr: "0 52 13 ? * 3/1", outErr: nil, outDesc: "Pukul 01:52 PM, Rabu hingga Sabtu"},
+
+		// Range
+		{inExpr: "0 23 ? * MON-FRI", outErr: nil, outDesc: "Pukul 11:00 PM, Senin hingga Jumat"},
+		{inExpr: "30 11 * * 1-5", outErr: nil, outDesc: "Pukul 11:30 AM, Senin hingga Jumat"},
+		{inExpr: "0-10 11 * * *", outErr: nil, outDesc: "Setiap menit pukul 11:00 AM hingga 11:10 AM"},
+		{inExpr: "23 12 * Jan-Mar *", outErr: nil, outDesc: "Pukul 12:23 PM, Januari hingga Maret"},
+		{inExpr: "23 12 * JAN-FEB *", outErr: nil, outDesc: "Pukul 12:23 PM, Januari hingga Februari"},
+		{inExpr: "1 1,3-4 * * *", outErr: nil, outDesc: "Menit 1 setiap jam, pukul 01:00 AM dan 03:00 AM hingga 04:59 AM"},
+		{inExpr: "* 0 */4 * * *", outErr: nil, outDesc: "Setiap detik, menit 0 setiap jam, setiap 4 jam"},
+		{inExpr: "*/10 0 * * * *", outErr: nil, outDesc: "Setiap 10 detik, menit 0 setiap jam"},
+		{inExpr: "* 0 0 * * *", outErr: nil, outDesc: "Setiap detik, menit 0 setiap jam, pukul 12:00 AM hingga 12:59 AM"},
+		{inExpr: "* 0 * * *", outErr: nil, outDesc: "Setiap menit, pukul 12:00 AM hingga 12:59 AM"},
+		{inExpr: "* 0 * * * *", outErr: nil, outDesc: "Setiap detik, menit 0 setiap jam"},
+
+		// At
+		{inExpr: "30 11 * * *", outErr: nil, outDesc: "Pukul 11:30 AM"},
+		{inExpr: "23 12 * * SUN", outErr: nil, outDesc: "Pukul 12:23 PM, hanya di hari Minggu"},
+		{inExpr: "30 02 14 * * *", outErr: nil, outDesc: "Pukul 02:02:30 PM"},
+		{inExpr: "0 0 6 1/1 * ?", outErr: nil, outDesc: "Pukul 06:00 AM"},
+		{inExpr: "0 5 0/1 * * ?", outErr: nil, outDesc: "Menit 5 setiap jam"},
+		{inExpr: "46 9 * * 1", outErr: nil, outDesc: "Pukul 09:46 AM, hanya di hari Senin"},
+		{inExpr: "46 9 * * 7", outErr: nil, outDesc: "Pukul 09:46 AM, hanya di hari Minggu", name: "7 should mean Sunday"},
+		{inExpr: "23 12 15 * *", outErr: nil, outDesc: "Pukul 12:23 PM, setiap tanggal 15"},
+		{inExpr: "23 12 * JAN *", outErr: nil, outDesc: "Pukul 12:23 PM, hanya di bulan Januari"},
+		{inExpr: "23 12 ? JAN *", outErr: nil, outDesc: "Pukul 12:23 PM, hanya di bulan Januari"},
+		{inExpr: "0 7 * * *", outErr: nil, outDesc: "Pukul 07:00 AM", name: "trailing space"},
+		{inExpr: "30 14,16 * * *", outErr: nil, outDesc: "Pukul 02:30 PM dan 04:30 PM"},
+		{inExpr: "30 6,14,16 * * *", outErr: nil, outDesc: "Pukul 06:30 AM, 02:30 PM dan 04:30 PM"},
+		{inExpr: "0 * 31 * 1", outErr: nil, outDesc: "Setiap jam, setiap tanggal 31, dan di hari Senin"},
+
+		// Weekday
+		{inExpr: "* * LW * *", outErr: nil, outDesc: "Setiap menit, pada hari kerja terakhir setiap bulan"},
+		{inExpr: "* * WL * *", outErr: nil, outDesc: "Setiap menit, pada hari kerja terakhir setiap bulan"},
+		{inExpr: "* * 1W * *", outErr: nil, outDesc: "Setiap menit, pada hari kerja pertama setiap bulan"},
+		{inExpr: "* * 13W * *", outErr: nil, outDesc: "Setiap menit, pada hari kerja terdekat dengan tanggal 13 setiap bulan"},
+		{inExpr: "* * W1 * *", outErr: nil, outDesc: "Setiap menit, pada hari kerja pertama setiap bulan"},
+		{inExpr: "* * 5W * *", outErr: nil, outDesc: "Setiap menit, pada hari kerja terdekat dengan tanggal 5 setiap bulan"},
+		{inExpr: "* * W5 * *", outErr: nil, outDesc: "Setiap menit, pada hari kerja terdekat dengan tanggal 5 setiap bulan"},
+
+		// Last
+		{inExpr: "* * * * 4L", outErr: nil, outDesc: "Setiap menit, pada Kamis terakhir setiap bulan"},
+		{inExpr: "*/5 * L JAN *", outErr: nil, outDesc: "Setiap 5 menit, pada hari terakhir setiap bulan, hanya di bulan Januari"},
+		{inExpr: "0 20 15,L * *", outErr: nil, outDesc: "Pukul 08:00 PM, setiap tanggal 15 dan hari terakhir setiap bulan"},
+		{inExpr: "0 20 1-10,20-L * *", outErr: nil, outDesc: "Pukul 08:00 PM, setiap tanggal 1 hingga 10 dan 20 hingga hari terakhir setiap bulan"},
+		{inExpr: "0 15 10 * * L", outErr: nil, outDesc: "Pukul 10:15 AM, hanya di hari Sabtu"},
+		{inExpr: "0 15 10 L * *", outErr: nil, outDesc: "Pukul 10:15 AM, pada hari terakhir setiap bulan"},
+		{inExpr: "0 0 0 L-5 * ?", outErr: nil, outDesc: "Pukul 12:00 AM, 5 hari menjelang akhir bulan"},
+
+		// DOWStartsAtOne
+		{inExpr: "23 12 * * 1#2", outErr: nil, outDesc: "Pukul 12:23 PM, pada Minggu kedua setiap bulan", isDOWStartsAtOne: true},
+		{inExpr: "* * * ? * 2-6/2", outErr: nil, outDesc: "Setiap detik, setiap 2 hari sekali dalam seminggu, Senin hingga Jumat", isDOWStartsAtOne: true},
+		{inExpr: "* * * ? * 7", outErr: nil, outDesc: "Setiap detik, hanya di hari Sabtu", isDOWStartsAtOne: true},
+		{inExpr: "* * * ? * 1,2,3,4,5", outErr: nil, outDesc: "Setiap detik, hanya di hari Minggu, Senin, Selasa, Rabu, dan Kamis", isDOWStartsAtOne: true},
+
+		// Non-trivial
+		{inExpr: "*/5 15 * * MON-FRI", outErr: nil, outDesc: "Setiap 5 menit, pukul 03:00 PM hingga 03:59 PM, Senin hingga Jumat"},
+		{inExpr: "* * * * MON#1", outErr: nil, outDesc: "Setiap menit, pada Senin pertama setiap bulan"},
+		{inExpr: "* * * * MON#2", outErr: nil, outDesc: "Setiap menit, pada Senin kedua setiap bulan"},
+		{inExpr: "* * * * MON#3", outErr: nil, outDesc: "Setiap menit, pada Senin ketiga setiap bulan"},
+		{inExpr: "* * * * MON#4", outErr: nil, outDesc: "Setiap menit, pada Senin keempat setiap bulan"},
+		{inExpr: "* * * * MON#5", outErr: nil, outDesc: "Setiap menit, pada Senin kelima setiap bulan"},
+		{inExpr: "5-10 * * * * *", outErr: nil, outDesc: "Detik 5 hingga 10 setiap menit"},
+		{inExpr: "5-10 30-35 10-12 * * *", outErr: nil, outDesc: "Detik 5 hingga 10 setiap menit, menit 30 hingga 35 setiap jam, pukul 10:00 AM hingga 12:59 PM"},
+		{inExpr: "30 */5 * * * *", outErr: nil, outDesc: "Detik 30 setiap menit, setiap 5 menit"},
+		{inExpr: "10 0/5 * * * ?", outErr: nil, outDesc: "Detik 10 setiap menit, setiap 5 menit"},
+		{inExpr: "2-59/3 1,9,22 11-26 1-6 ?", outErr: nil, outDesc: "Setiap 3 menit, menit 2 hingga 59 setiap jam, pukul 01:00 AM, 09:00 AM, dan 10:00 PM, setiap tanggal 11 hingga 26, Januari hingga Juni"},
+		{inExpr: "23 12 * JAN-FEB * 2013-2014", outErr: nil, outDesc: "Pukul 12:23 PM, Januari hingga Februari, 2013 hingga 2014"},
+		{inExpr: "23 12 * JAN-MAR * 2013-2015", outErr: nil, outDesc: "Pukul 12:23 PM, Januari hingga Maret, 2013 hingga 2015"},
+		{inExpr: "12-50 0-10 6 * * * 2022", outErr: nil, outDesc: "Detik 12 hingga 50 setiap menit, menit 0 hingga 10 setiap jam, pukul 06:00 AM, hanya di tahun 2022"},
+		{inExpr: "0 0/30 8-9 5,20 * ?", outErr: nil, outDesc: "Setiap 30 menit, pukul 08:00 AM hingga 09:59 AM, setiap tanggal 5 dan 20"},
+		{inExpr: "23 12 * * SUN#2", outErr: nil, outDesc: "Pukul 12:23 PM, pada Minggu kedua setiap bulan"},
+		{inExpr: "0 25 7-19/8 ? * *", outErr: nil, outDesc: "Menit 25 setiap jam, setiap 8 jam, pukul 07:00 AM hingga 07:59 PM"},
+		{inExpr: "0 25 7-20/13 ? * *", outErr: nil, outDesc: "Menit 25 setiap jam, setiap 13 jam, pukul 07:00 AM hingga 08:59 PM"},
+		{inExpr: "0 0 8 1/3 * ? *", outErr: nil, outDesc: "Pukul 08:00 AM, setiap 3 hari sekali"},
+		{inExpr: "0 15 10 ? * */3", outErr: nil, outDesc: "Pukul 10:15 AM, setiap 3 hari sekali dalam seminggu"},
+		{inExpr: "* * * ? * 1-5/2", outErr: nil, outDesc: "Setiap detik, setiap 2 hari sekali dalam seminggu, Senin hingga Jumat"},
+		{inExpr: "0 5 7 2 1/3 ? *", outErr: nil, outDesc: "Pukul 07:05 AM, setiap tanggal 2, setiap 3 bulan sekali"},
+		{inExpr: "0 15 6 1 1 ? 1/2", outErr: nil, outDesc: "Pukul 06:15 AM, setiap tanggal 1, hanya di bulan Januari, setiap 2 tahun sekali"},
+		{inExpr: "2,4-5 1 * * *", outErr: nil, outDesc: "Menit 2 dan 4 hingga 5 setiap jam, pukul 01:00 AM"},
+		{inExpr: "2,26-28 18 * * *", outErr: nil, outDesc: "Menit 2 dan 26 hingga 28 setiap jam, pukul 06:00 PM"},
+		{inExpr: "5/30 * * * * ?", outErr: nil, outDesc: "Setiap 30 detik, mulai detik 5 setiap menit"},
+		{inExpr: "0 5/30 * * * ?", outErr: nil, outDesc: "Setiap 30 menit, mulai menit 5 setiap jam"},
+		{inExpr: "* * 5/8 * * ?", outErr: nil, outDesc: "Setiap detik, setiap 8 jam, mulai pukul 05:00 AM"},
+		{inExpr: "0 5 7 2/3 * ? *", outErr: nil, outDesc: "Pukul 07:05 AM, setiap 3 hari sekali, mulai setiap tanggal 2"},
+		{inExpr: "0 5 7 ? 3/2 ? *", outErr: nil, outDesc: "Pukul 07:05 AM, setiap 2 bulan sekali, Maret hingga Desember"},
+		{inExpr: "0 5 7 ? * 2/3 *", outErr: nil, outDesc: "Pukul 07:05 AM, setiap 3 hari sekali dalam seminggu, Selasa hingga Sabtu"},
+		{inExpr: "0 5 7 ? * ? 2016/4", outErr: nil, outDesc: "Pukul 07:05 AM, setiap 4 tahun sekali, 2016 hingga 2099"},
+		{inExpr: "0 30 10-13 ? * wed,FRI", outErr: nil, outDesc: "Menit 30 setiap jam, pukul 10:00 AM hingga 01:59 PM, hanya di hari Rabu dan Jumat"},
+		{inExpr: "0 00 10 ? * MON-THU,SUN *", outErr: nil, outDesc: "Pukul 10:00 AM, hanya di hari Senin hingga Kamis dan Minggu"},
+		{inExpr: "0 0 0 1,2,3 * WED,FRI", outErr: nil, outDesc: "Pukul 12:00 AM, setiap tanggal 1, 2, dan 3, dan di hari Rabu dan Jumat"},
+		{inExpr: "0 2,16 1,8,15,22 * 1,2", outErr: nil, outDesc: "Pukul 02:00 AM dan 04:00 PM, setiap tanggal 1, 8, 15, dan 22, dan di hari Senin dan Selasa"},
+		{inExpr: "0 */4,6 * * * ", outErr: nil, outDesc: "Menit 0 setiap jam, setiap 4,6 jam"},
+		{inExpr: "5 30 6,14,16 5 * *", outErr: nil, outDesc: "Detik 5 setiap menit, menit 30 setiap jam, pukul 06:00 AM, 02:00 PM, dan 04:00 PM, setiap tanggal 5"},
+		{inExpr: "0-20/3 9 * * *", outErr: nil, outDesc: "Setiap 3 menit, menit 0 hingga 20 setiap jam, pukul 09:00 AM hingga 09:59 AM"},
+
+		// Verbose
+		{inExpr: "30 4 1 * *", isVerbose: true, outErr: nil, outDesc: "Pukul 04:30 AM, setiap tanggal 1"},
+		{inExpr: "0 13 * * 1", isVerbose: true, outErr: nil, outDesc: "Pukul 01:00 PM, hanya di hari Senin"},
+
+		// Error
+		{inExpr: "sdlksldksldksd", outErr: InvalidExprError, outDesc: ""},
+		{inExpr: "", outErr: InvalidExprError, outDesc: ""},
+		{inExpr: "0 30 14 1W,15W * ? *", outErr: InvalidExprDayOfMonthError, outDesc: ""},
+	}
+}
