@@ -490,7 +490,11 @@ func getSegmentDescription(expr, allDesc string,
 		desc = sprintf(getDescriptionFormat(expr), getSingleItemDescription(expr))
 	} else if strings.Index(expr, "/") > -1 {
 		segments := strings.Split(expr, "/")
-		desc = sprintf(getIntervalDescriptionFormat(segments[1]), segments[1])
+		intervalValue := segments[1]
+		if strings.Index(intervalValue, ",") > -1 {
+			intervalValue = strings.Replace(intervalValue, ",", locale.GetString(spaceAnd)+" ", -1)
+		}
+		desc = sprintf(getIntervalDescriptionFormat(intervalValue), intervalValue)
 
 		// interval contains 'between' piece (i.e. 2-59/3 )
 		if strings.Index(segments[0], "-") > -1 {

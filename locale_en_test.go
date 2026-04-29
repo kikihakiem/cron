@@ -117,7 +117,7 @@ func en_TestCases() []localeTestCase {
 		{inExpr: "0 00 10 ? * MON-THU,SUN *", outErr: nil, outDesc: "At 10:00 AM, only on Monday through Thursday and Sunday"},
 		{inExpr: "0 0 0 1,2,3 * WED,FRI", outErr: nil, outDesc: "At 12:00 AM, on day 1, 2, and 3 of the month, and on Wednesday and Friday"},
 		{inExpr: "0 2,16 1,8,15,22 * 1,2", outErr: nil, outDesc: "At 02:00 AM and 04:00 PM, on day 1, 8, 15, and 22 of the month, and on Monday and Tuesday"},
-		{inExpr: "0 */4,6 * * * ", outErr: nil, outDesc: "At 0 minutes past the hour, every 4,6 hours"},
+		{inExpr: "0 */4,6 * * * ", outErr: nil, outDesc: "At 0 minutes past the hour, every 4 and 6 hours"},
 		{inExpr: "5 30 6,14,16 5 * *", outErr: nil, outDesc: "At 5 seconds past the minute, at 30 minutes past the hour, at 06:00 AM, 02:00 PM, and 04:00 PM, on day 5 of the month"},
 		{inExpr: "0-20/3 9 * * *", outErr: nil, outDesc: "Every 3 minutes, minutes 0 through 20 past the hour, between 09:00 AM and 09:59 AM"},
 
